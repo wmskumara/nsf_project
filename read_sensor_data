@@ -1,0 +1,68 @@
+#!/usr/bin/python
+
+from ABE_ADCDifferentialPi import ADCDifferentialPi
+from ABE_helpers import ABEHelpers
+import time
+import os
+
+i2c_helper = ABEHelpers()
+bus = i2c_helper.get_smbus()
+adc = ADCDifferentialPi(bus, 0x68, 0x69, 16)
+
+temp1 = (float(adc.read_voltage(1))) #reading temprature from channel 1
+temp2 = (float(adc.read_voltage(3))) #reading temprature from channel 3
+temp3 = (float(adc.read_voltage(5))) #reading temprature from channel 5
+
+slope1 = 0.0301
+slope2 = 0.0295
+
+#read from sensor one data(tempraure & humidity)
+def s1_rhout(inval): 
+  rh = (inval - 0.74)/slope1
+  return rh
+def s1_trueval(inval2):
+  vout = (inval2 * (99.6 + 94.1))/94.1
+  return vout
+def s1_truerh(inval2):
+  trrh = inval2 / (1.0546-(temp1*0.00216))
+  return trrh
+   
+   
+#read from sensor two data(tempraure & humidity)   
+def s2_rhout(inval): 
+  rh = (inval - 0.74)/slope1
+  return rh
+def s2_truerh(inval1):
+  trrh = inval1 / (1.0546-(temp3*0.00216))
+  return trrh
+def s2_trueval(inval1):
+  vout = (inval1 * (99.4 + 95.2))/95.2
+  return vout
+
+#read from sensor three data(tempraure & humidity)
+def s3_rhout(inval): 
+  rh = (inval - 0.74)/slope1
+  return rh
+def s3_truerh(inval1):
+  trrh = inval1 / (1.0546-(temp5*0.00216))
+  return trrh
+def s3_trueval(inval1):
+  vout = (inval1 * (99.4 + 95.2))/95.2
+  return vout
+
+
+while (True):  
+  print ("Current Temprature channel 1: %0.2f" % (adc.read_voltage(1)*96))                              #print temprature
+  print ("Current Humidity channel 2: %0.2f" % s2_truerh(s2_rhout(s2_trueval(adc.read_voltage(2)))))    #print humidity
+  
+  print ("Current Temprature channel 3: %0.2f" % (adc.read_voltage(3)*96))                              #print temprature
+  print ("Current Humidity channel 4: %0.2f" % s1_truerh(s1_rhout(s1_trueval(adc.read_voltage(4)))))    #print humidity
+  
+  print ("Current Temprature channel 5: %0.2f" % (adc.read_voltage(5)*96))                              #print temprature
+  print ("Current Humidity channel 6: %0.2f" % s1_truerh(s1_rhout(s1_trueval(adc.read_voltage(6)))))    #print humidity
+  
+  print ("-----------------------------------") 
+
+
+time.sleep(1)
+ 
