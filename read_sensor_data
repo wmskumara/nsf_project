@@ -53,18 +53,22 @@ def s3_trueval(inval1):
 def cal_pressure(inval):
   reading = (float(inval/0.020))*2068.43
   return reading
+
+def cal_temp(inval):
+  temp = inval * 96
+  return temp
   
   
 print("Operation Started @ %s" % time.strftime('%M:%S%p on %b %d, %Y'))
 while (True):
   print("Current Time %s" % time.strftime('%M:%S%p'))
-  print ("Current Temprature channel 1: %0.2f" % (adc.read_voltage(1)*96))                              #print temprature
+  print ("Current Temprature channel 1: %0.2f" % cal_temp(adc.read_voltage(1))                              #print temprature
   print ("Current Humidity channel 2: %0.2f" % s2_truerh(s2_rhout(s2_trueval(adc.read_voltage(2)))))    #print humidity
   
-  print ("Current Temprature channel 3: %0.2f" % (adc.read_voltage(3)*96))                              #print temprature
+  print ("Current Temprature channel 3: %0.2f" % cal_temp(adc.read_voltage(3))                              #print temprature
   print ("Current Humidity channel 4: %0.2f" % s1_truerh(s1_rhout(s1_trueval(adc.read_voltage(4)))))    #print humidity
   
-  print ("Current Temprature channel 5: %0.2f" % (adc.read_voltage(5)*96))                              #print temprature
+  print ("Current Temprature channel 5: %0.2f" % cal_temp(adc.read_voltage(5))                              #print temprature
   print ("Current Humidity channel 6: %0.2f" % s1_truerh(s1_rhout(s1_trueval(adc.read_voltage(6)))))    #print humidity
   
   print("Current Pressure channel 7: %0.2f" % cal_pressure(adc.read_voltage(7)))
