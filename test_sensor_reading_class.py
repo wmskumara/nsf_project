@@ -12,5 +12,5 @@ while (True):
   print("RH sr1 :", round(RH1,2))
   print("Temprature sr2 :", round(temp1,2))
   print("RH sr1 :", round(RH2,2))
-  print(time.strftime("%H:%M:%S"))
-  time.sleep(1)
+  print(time.strftime("%H:%M:%S")) # print current system time
+  time.sleep(1) # delay for one second
